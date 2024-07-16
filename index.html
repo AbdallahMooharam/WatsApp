@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Chat App</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script src='main.js'></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
+
+</head>
+<body>
+<div>
+    <h1>Whats App file</h1>
+    <input type="number" value="number" placeholder="pone number"><br>
+    <input type="file" value="PDF" name="PDF" accept=".pdf,.jpg,.jpeg,.png" multiple><br>
+    <button onclick="sendMessage()">send</button>
+
+</div>
+<div>
+    <h1>Chat App</h1>
+    <input type="number" value="number" placeholder="pone number"><br>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+
+<script>
+    // Replace these with your Firebase project config
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        databaseURL: "YOUR_DATABASE_URL",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Get the user's phone number (replace this with your own logic)
+    const currentUserPhoneNumber = "123456789"; // Example phone number
+
+    function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const message = messageInput.value;
+        messageInput.value = '';
+
+        // Send message to the database with user's phone number
+        database.ref('messages').push({
+            text: message,
+            sender: currentUserPhoneNumber // Include sender information
+        });
+    }
+
+    // Display messages based on sender information
+    database.ref('messages').on('child_added', function(snapshot) {
+        const message = snapshot.val();
+        const chatDiv = document.getElementById('chat');
+
+        // Check if the message is from the current user
+        if (message.sender === currentUserPhoneNumber) {
+            chatDiv.innerHTML += `<p style="color: green;">Me: ${message.text}</p>`;
+        } else {
+            chatDiv.innerHTML += `<p style="color: blue;">Other: ${message.text}</p>`;
+        }
+    });
+</script>
+
+
+
+    
+</body>
+</html>
+

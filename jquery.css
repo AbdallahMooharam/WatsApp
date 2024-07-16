@@ -1,0 +1,20 @@
+body{
+    background-color: black;
+    display: flex;
+}
+
+.card{
+    width: 24%;
+    display: none;
+}
+.container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap:20px !important;
+    background-color: antiquewhite;
+    width: 100px !important;
+    height: 100px !important;
+
+}
